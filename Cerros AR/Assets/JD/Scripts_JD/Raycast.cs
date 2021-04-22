@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Raycast : MonoBehaviour
 {
+
+    private bool touching = false;
+    private Soul_Controller SC;
     // Start is called before the first frame update
     void Start()
     {
@@ -13,7 +16,7 @@ public class Raycast : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
             //Debug.Log("Cleeek");
             //Create a ray that comes from the position of the mouse
@@ -23,18 +26,47 @@ public class Raycast : MonoBehaviour
             //if the ray hits anything
             if (Physics.Raycast(rayito, out hit))
             {
-                //do magic
-                Debug.Log(hit.transform.name);
-                Soul_Controller SC;
-                SC = hit.transform.GetComponent<Soul_Controller>();
-                if (SC != null)
+                if (hit.transform.name == "Soul")
                 {
-                    SC.act();
+                    if (touching != true)
+                    {
+                        //do magic
+                        Debug.Log(hit.transform.name);
+                        SC = hit.transform.GetComponent<Soul_Controller>();
+                        if (SC != null)
+                        {
+                            SC.act();
+                        }
+                        touching = true;
+                    }
+
+                }
+
+                else if (hit.transform.name != "Soul" && touching == true)
+                {
+                    touching = false;
+                    Debug.Log(hit.transform.name);
+                    if (SC != null)
+                    {
+                        StartCoroutine(SC.Uaredead());
+                    }
                 }
                 //I destroy what I toucj
                 //Destroy(hit.transform.gameObject);
+                //SC.reestart();
             }
 
+
+
+
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            touching = false;
+            if (SC != null)
+            {
+                StartCoroutine(SC.Uaredead());
+            }
         }
     }
 }
