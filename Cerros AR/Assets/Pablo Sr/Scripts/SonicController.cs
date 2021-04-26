@@ -24,8 +24,12 @@ public class SonicController : MonoBehaviour
         transform.position += Direction * speed * Time.deltaTime;
     }
 
-    public void DieSonic()
+    private void OnTriggerEnter(Collider other)
     {
-
+        Debug.Log("in");
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        Debug.Log("out");
     }
 }
